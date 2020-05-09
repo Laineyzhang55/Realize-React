@@ -122,6 +122,6 @@ console.log(div);
 执行，启动测试
 ```
 npm run start 
-```
+```  
 ## 参考
 [babel文档](https://babeljs.io/docs/en/babel-preset-react)

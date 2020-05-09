@@ -9,12 +9,12 @@ module.exports = {
     rules:[
       {
         test:/\.(js|jsx)$/,
-        exclude: /node_module/,
+        exclude: /node_modules/,
         use:{loader:'babel-loader'}
       }
     ]
   },
-  plugin:[
+  plugins:[
     new HtmlWebpackPlugin()
   ],
   output:{
