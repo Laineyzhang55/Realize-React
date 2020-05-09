@@ -97,6 +97,7 @@ module.exports = {
 npm i --save-dev html-webpack-plugin webpack-dev-server
 ```
 修改 package.json
+
 ```
 {
   ...
@@ -106,9 +107,10 @@ npm i --save-dev html-webpack-plugin webpack-dev-server
   },
   ...
 }
-
+```
 ## 测试jsx
 设置`./src/index.js`文件内容
+
 ```
 const React = {
   createElement(...args) {
@@ -119,6 +121,7 @@ const React = {
 let div = <div>hello </div>;
 console.log(div);
 ```
+
 执行，启动测试
 ```
 npm run start 
