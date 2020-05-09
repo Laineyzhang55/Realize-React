@@ -1,11 +1,8 @@
 import React from './lib/react';
 import ReactDOM from './lib/react-dom';
 
-class Article extends React.Component {
-
-  render() {
+function Article(attrs) {
     return <p>hello { this.props.title }</p>;
-  }
 }
 
 class App extends React.Component{

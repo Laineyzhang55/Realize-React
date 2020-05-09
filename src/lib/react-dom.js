@@ -1,18 +1,6 @@
-function setAttribute(node, attrs) {
-  if(!attrs) return
+import React from './react.js';
 
-  for(let key in attrs) {
-    if(key.startsWith('on')){
-      node[key.toLocaleLowerCase()] = attrs[key];
-    }else if(key === 'style'){
-      Object.assign(node.style, attrs[key]);
-    } else {
-      node[key] = attrs[key];
-    }
-  }
-}
-
-function render(vdom,container) {
+function render(vdom, container) {
   let dom = createDomFromVdom(vdom);
   container.appendChild(dom);
 }
@@ -20,23 +8,41 @@ function render(vdom,container) {
 function createDomFromVdom(vdom) {
   let dom;
   if(typeof vdom === 'string') {
-  dom = document.createTextNode(vdom);
+    dom = document.createTextNode(vdom);
   }
+
   if(typeof vdom === 'object') {
-    if(typeof vdom.tag ==='function'){
-      let component = new vdom.tag(vdom.attrs);
+    if(typeof vdom.tag === 'function') {
+      let component = createComponent(vdom.tag, vdom.attrs);
       let componentVdom = component.render();
       dom = createDomFromVdom(componentVdom); 
       component.$root = dom; 
-    }else {
+    } else {
       dom = document.createElement(vdom.tag);
       setAttribute(dom, vdom.attrs);
       vdom.children.forEach(childVdom => render(childVdom, dom));
     }
-  
+
   }
   return dom
-} 
+}
+
+function createComponent(constructor, attrs) {
+  let component; 
+  //如果是用class创建的
+  if(constructor.prototype instanceof React.Component) {
+    component = new constructor(attrs);
+  } else {
+    let Component = class extends React.Component {};
+    Component.prototype.render = function() {
+      return constructor.bind(this)(attrs);
+    }
+    component = new Component(attrs);   
+  } 
+  console.log(component);
+  return component;
+}
+
 
 function renderComponent(component) {
   let componentVdom = component.render();
@@ -48,12 +54,27 @@ function renderComponent(component) {
   component.$root = dom;  
 }
 
-const ReactDOM = {
-  render(vdom, container) {
-    container.inerHTML=''
-    render(vdom,container)
-  },
-  renderComponent
+function setAttribute(node, attrs) {
+  if(!attrs) return;
+
+  for(let key in attrs) {
+    if(key.startsWith('on')) {
+      node[key.toLocaleLowerCase()] = attrs[key];
+    } else if(key === 'style') {
+      Object.assign(node.style, attrs[key]);
+    } else {
+      node[key] = attrs[key];
+    }
+  }
 }
 
-export default ReactDOM
+
+const ReactDom = {
+  render(vdom, container) {
+    container.innerHTML = '';
+    render(vdom, container);
+  },
+  renderComponent
+};
+
+export default ReactDom;
